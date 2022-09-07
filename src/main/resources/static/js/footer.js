@@ -1,0 +1,13 @@
+document.writeln("<footer class=\"navbar-fixed-bottom\">");
+document.writeln("    <div class=\"navbar-inner\">");
+document.writeln("        <div class=\"row pt-3 pb-5\">");
+document.writeln("            <div class=\"span12\" style=\"text-align: center;\">");
+document.writeln("                <div class=\"pt-4\">");
+document.writeln("                    <div class=\"text-muted\">");
+document.writeln("                        @ by <a  class=\"btn btn-warning btn-xs \" href=\'https://github.com/Ghost2097221\'>会上树的猪</a>");
+document.writeln("                    </div>");
+document.writeln("                </div>");
+document.writeln("            </div>");
+document.writeln("        </div>");
+document.writeln("    </div>");
+document.writeln("</footer>");

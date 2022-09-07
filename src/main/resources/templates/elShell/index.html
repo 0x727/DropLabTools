@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/static/css/css.css"/>
+  <title>el表达式shell客户端</title>
+</head>
+<body class="body">
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <script src="/static/js/head.js"></script>
+    <div>
+      <span style="color: red" th:text="${proxyset}" th:if="${not #strings.isEmpty(proxyset) }"></span>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>自动寻址写入webshell</h3>
+    <p class="help-block">基于任意代码执行自动寻址写入一个webshell</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/elshell/elShellUploadShell}" method="post"
+        enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">webshell</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="url" placeholder="webshell地址"
+               th:value="${elShellUploadShellurl}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">网站根URL</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="rooturl" placeholder="请求后需要使用这个参数去校验webshell是否上传成功"
+               th:value="${elShellUploadShellrooturl}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">全类名</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="classname" placeholder="自动寻址的全类名，内置了一些高频全类名，也可以添加自己完全确定的全类名">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">WEBSHELL</label>
+      <div class="col-md-10">
+        <input type="file" name="files" placeholder="你要写入的webshell">
+      </div>
+    </div>
+
+
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${elShellUploadShell}"
+                          th:if="${not #strings.isEmpty(elShellUploadShell) }"></textarea>
+        <p class="help-block" style="color: red" th:text="${elShellUploadShelltips}"
+           th:if="${not #strings.isEmpty(elShellUploadShelltips) }"></p>
+      </div>
+    </div>
+  </form>
+</div>
+
+<hr>
+
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>无回显的命令执行</h3>
+    <p class="help-block">无回显的命令执行，相对稳定</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/elshell/elNoResponseExec}" method="post"
+        enctype="application/x-www-form-urlencoded">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">webshell</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="url" placeholder="webshell地址"
+               th:value="${elNoResponseExecurl}">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">执行命令</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="cmd" placeholder="calc.exe">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">目标系统</label>
+      <div class="col-md-10">
+        <select name="platform">
+          <option th:selected="${elNoResponseExecplatform} eq 'windows'">windows</option>
+          <option th:selected="${elNoResponseExecplatform} eq 'linux'">linux</option>
+        </select>
+      </div>
+    </div>
+
+
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${elNoResponseExec}"
+                          th:if="${not #strings.isEmpty(elNoResponseExec) }"></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<hr>
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>回显的命令执行</h3>
+    <p class="help-block">回显的命令执行，基于任意代码执行，不稳定</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/elshell/elResponseExec}" method="post"
+        enctype="application/x-www-form-urlencoded">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">webshell</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="url" placeholder="webshell地址"
+               th:value="${elResponseExecurl}">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">执行命令</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="cmd" placeholder="calc.exe">
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">目标中间件</label>
+      <div class="col-md-10">
+        <select name="middle">
+          <option th:selected="${elResponseExecplatform} eq 'Tomcat'">Tomcat</option>
+          <option th:selected="${elResponseExecplatform} eq 'Resin'">Resin</option>
+        </select>
+      </div>
+    </div>
+
+
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${elResponseExec}"
+                          th:if="${not #strings.isEmpty(elResponseExec) }"></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<hr>
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>内存马注入</h3>
+    <p class="help-block">基于任意代码执行注入内存马</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/elshell/elMemory}" method="post"
+        enctype="application/x-www-form-urlencoded">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">url</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="url" placeholder="webshell地址">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">内存马中间件</label>
+      <div class="col-md-10">
+        <select name="mType">
+          <option selected="selected">Tomcat</option>
+          <option>Resin</option>
+          <option>Jetty</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">内存马类型</label>
+      <div class="col-md-10">
+        <select name="mMiddle">
+          <option selected="selected">Valve</option>
+          <option>Filter</option>
+          <option>Listner</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label">内存马路径</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="path" placeholder="Filter内存马需要填入路径">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">内存马密码</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="password" placeholder="内存马密码,默认：qax36oNbs">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">菜刀类型</label>
+      <div class="col-md-10">
+        <select name="mshellType">
+          <option selected="selected">Behinder</option>
+          <option>Godzilla</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${elMemory}"
+                          th:if="${not #strings.isEmpty(elMemory) }"></textarea>
+        <p class="help-block" style="color: red" th:text="${elMemorytips}"
+           th:if="${not #strings.isEmpty(elMemorytips) }"></p>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+</body>
+</html>
+

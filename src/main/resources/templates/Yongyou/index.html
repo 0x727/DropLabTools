@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/css.css"/>
+    <script src="/static/js/yongyou/yongyou.js"></script>
+    <script src="/static/js/jquery-min.js"></script>
+    <script src="/static/js/jquery.serializejson.js"></script>
+    <title>用友系列</title>
+</head>
+<body class="body">
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <script src="/static/js/head.js"></script>
+        <div>
+            <span style="color: red" th:text="${proxyset}" th:if="${not #strings.isEmpty(proxyset) }"></span>
+        </div>
+    </div>
+</nav>
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>用友NC反序列化URL检查</h3>
+        <p class="help-block">用于检测用友NC存在哪些URL</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/yongyou/YongyouCheckeURL}" method="POST"
+          enctype="application/x-www-form-urlencoded">
+        <div class="form-group">
+            <label class="col-md-2 control-label">URL</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="url" placeholder="目标url"
+                       th:value="${YongyouCheckeURLurl}">
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${YongyouCheckeURL}"
+                          th:if="${not #strings.isEmpty(YongyouCheckeURL) }"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr>
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>用友NC反序列化payload生成</h3>
+        <p class="help-block">生成base64编码的payload，如果请求出错会返回payload可以自行尝试。</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/yongyou/GetUnserializePayload}" method="post"
+          enctype="application/x-www-form-urlencoded">
+        <div class="form-group">
+            <label class="col-md-2 control-label">URL</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="url" placeholder="目标url,填写完整的接口url"
+                       th:value="${GetUnserializePayloadurl}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">攻击选项</label>
+            <div class="col-md-10">
+                <select name="mOption">
+                    <option selected="selected">DNSLOG</option>
+                    <option>Blind</option>
+                    <option>Execute</option>
+                    <option>UploadShell</option>
+                    <option>MemoryShell</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">DNSLOG</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="dnslog" placeholder="如果选择dnslog探测，需要填写dnslog，格式：http://aaaa.dnslog.cn">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Blind</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="BlindExec" placeholder="如果选择blind无回显命令执行，填写你要执行的命令">
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${GetUnserializePayload}"
+                          th:if="${not #strings.isEmpty(GetUnserializePayload) }"></textarea>
+                <p class="help-block" style="color: red" th:text="${GetUnserializePayloadtips}"
+                   th:if="${not #strings.isEmpty(GetUnserializePayloadtips) }"></p>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

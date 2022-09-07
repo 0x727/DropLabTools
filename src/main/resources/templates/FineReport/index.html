@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/static/css/css.css"/>
+  <script src="/static/js/finereport/finereport.js"></script>
+  <script src="/static/js/jquery-min.js"></script>
+  <script src="/static/js/jquery.serializejson.js"></script>
+  <title>帆软报表</title>
+</head>
+<body class="body">
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <script src="/static/js/head.js"></script>
+    <div>
+      <span style="color: red" th:text="${proxyset}" th:if="${not #strings.isEmpty(proxyset) }"></span>
+    </div>
+  </div>
+</nav>
+
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>帆软V8后台任意文件上传</h3>
+    <p class="help-block">多个漏洞组合攻击</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/finereport/V8GETSHELLONE}" method="post"
+        enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">URL</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="url" placeholder="目标url,格式-http://ip:port,自动添加路径"
+               th:value="${V8GETSHELLONEurl}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">platform</label>
+      <div class="col-md-10">
+        <select name="platform">
+          <option selected="selected">windows</option>
+          <option>linux</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">depth</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="depth" placeholder="目录穿越深度,根据源码分析是4层,根据提交报告是2层,所以此处可以自己尝试穿越不同的层数,默认4层">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">Cookie</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="cookie" placeholder="漏洞利用需要后台权限，如果不传递Cookie将尝试文件读取漏洞获取管理员账户密码">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">WEBSHELL</label>
+      <div class="col-md-10">
+        <input type="file" name="files" placeholder="你要写入的webshell">
+      </div>
+    </div>
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${V8GETSHELLONE}"
+                          th:if="${not #strings.isEmpty(V8GETSHELLONE) }"></textarea>
+        <p class="help-block" style="color: red" th:text="${V8GETSHELLONEtips}"
+           th:if="${not #strings.isEmpty(V8GETSHELLONEtips) }"></p>
+      </div>
+    </div>
+  </form>
+</div>
+<hr>
+
+
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>帆软V8文件上传二</h3>
+    <p class="help-block">通过插件更新功能上传shell</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/finereport/V8GETSHELLTWO}" method="post"
+        enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">URL</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="url" placeholder="目标url,格式-http://ip:port,自动添加路径"
+               th:value="${V8GETSHELLTWOurl}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">platform</label>
+      <div class="col-md-10">
+        <select name="platform">
+          <option selected="selected">windows</option>
+          <option>linux</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group sr-only">
+      <label class="col-md-2 control-label">depth</label>
+      <div class="col-md-10">
+        <input type="text" class="form-control" value="2" name="depth"  placeholder="根据提交报告是2层,此处可以自己尝试穿越不同的层数"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">WEBSHELL</label>
+      <div class="col-md-10">
+        <input type="file" name="files" placeholder="你要写入的webshell">
+      </div>
+    </div>
+
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${V8GETSHELLTWO}"
+                          th:if="${not #strings.isEmpty(V8GETSHELLTWO) }"></textarea>
+        <p class="help-block" style="color: red" th:text="${V8GETSHELLTWOtips}"
+           th:if="${not #strings.isEmpty(V8GETSHELLTWOtips) }"></p>
+      </div>
+    </div>
+  </form>
+</div>
+
+<hr>
+
+<hr>
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>帆软V9任意文件覆盖</h3>
+    <p class="help-block">帆软V9任意文件覆盖漏洞</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/finereport/V9FileOverWrite}" method="post"
+        enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">URL</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="url" placeholder="目标url"
+               th:value="${V9FileOverWriteurl}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">覆盖的文件</label>
+      <div class="col-md-10">
+        <select name="overFile">
+          <option selected="selected">update.jsp</option>
+          <option>update1.jsp</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">WEBSHELL</label>
+      <div class="col-md-10">
+        <input type="file" name="files" placeholder="你要写入的webshell">
+      </div>
+    </div>
+
+
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${V9FileOverWrite}"
+                          th:if="${not #strings.isEmpty(V9FileOverWrite) }"></textarea>
+        <p class="help-block" style="color: red" th:text="${V9FileOverWritetips}"
+           th:if="${not #strings.isEmpty(V9FileOverWritetips) }"></p>
+      </div>
+    </div>
+  </form>
+</div>
+
+<hr>
+
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>帆软v10反序列化</h3>
+    <p class="help-block">用于生成base64格式的帆软v10反序列化数据，url:/webroot/decision/remote/design/channel</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/finereport/GetUnserializePayload}" method="POST"
+        enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">攻击类型</label>
+      <div class="col-md-10">
+        <select id="select" name="mOption" onchange="appendform()">
+          <option>Execute</option>
+          <option>MemoryShell</option>
+          <option>UploadShell</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="appendform">
+      <div class="form-group">
+        <label class="col-md-2 control-label">执行命令</label>
+        <div class="col-md-10">
+          <input class="form-control" type="text" name="cmd" disabled='disabled' placeholder="通过Header头传递Testdmc和Testecho两个参数">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-2 control-label">中间件类型</label>
+        <div class="col-md-10">
+          <select name="mType">
+            <option selected="selected">Tomcat</option>
+            <!--<option>Weblogic</option>-->
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${GetUnserializePayload}"
+                          th:if="${not #strings.isEmpty(GetUnserializePayload) }"></textarea>
+        <p class="help-block" style="color: red" th:text="${GetUnserializePayloadtips}"
+           th:if="${not #strings.isEmpty(GetUnserializePayloadtips) }"></p>
+      </div>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/css.css"/>
+    <title>fastjson</title>
+</head>
+<body class="body">
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <script src="/static/js/head.js"></script>
+        <div>
+            <span style="color: red" th:text="${proxyset}" th:if="${not #strings.isEmpty(proxyset) }"></span>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>BCEL不出网构造链</h3>
+        <p class="help-block">fastjson基于BCEL的不出网构造链,提供自动寻址落地webshell和回显命令执行,注入valve内存马</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/fastjson/bcel}" method="post"
+          enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">payload选项</label>
+            <div class="col-md-10">
+                <select name="mOption">
+                    <option selected="selected">UploadShell</option>
+                    <option>Execute</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">cmd</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="" placeholder="要执行的命令通过Header头中的的Testdmc参数传递" disabled="disabled">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">中间件类型</label>
+            <div class="col-md-10">
+                <select name="mType">
+                    <option selected="selected">Tomcat</option>
+                    <option>Resin</option>
+                    <option>Jetty</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">WEBSHELL</label>
+            <div class="col-md-10">
+                <input type="file" name="files" placeholder="你要写入的webshell">
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${bcel}"
+                          th:if="${not #strings.isEmpty(bcel) }"></textarea>
+                <p class="help-block" style="color: red" th:text="${bceltips}"
+                   th:if="${not #strings.isEmpty(bceltips) }"></p>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr>
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>BCEL不出网构造链注入内存马</h3>
+        <p class="help-block">fastjson基于BCEL的不出网构造链,注入valve内存马</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/fastjson/bcelMemory}" method="post"
+          enctype="application/x-www-form-urlencoded">
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">payload选项</label>
+            <div class="col-md-10">
+                <select name="mOption">
+                    <option>MemoryShell</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">内存马中间件</label>
+            <div class="col-md-10">
+                <select name="mType">
+                    <option selected="selected">Tomcat</option>
+                    <option>Resin</option>
+                    <option>Jetty</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">内存马类型</label>
+            <div class="col-md-10">
+                <select name="mMiddle">
+                    <option selected="selected">Valve</option>
+                    <option>Filter</option>
+                    <option>Listner</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">内存马路径</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="path" placeholder="Filter内存马需要填入路径">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">内存马密码</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="password" placeholder="内存马密码,默认：qax36oNbs">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">菜刀类型</label>
+            <div class="col-md-10">
+                <select name="mshellType">
+                    <option selected="selected">Behinder</option>
+                    <option>Godzilla</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${bcelMemory}"
+                          th:if="${not #strings.isEmpty(bcelMemory) }"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">内存马代码</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${bcelMemoryCode}"
+                          th:if="${not #strings.isEmpty(bcelMemoryCode) }"></textarea>
+                <p class="help-block" style="color: red" th:text="${bcelMemorytips}"
+                   th:if="${not #strings.isEmpty(bcelMemorytips) }"></p>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr>
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>基于C3P0二次反序列化不出网Payload</h3>
+        <p class="help-block">利用C3P0二次反序列化结合C3P0本身的构造链执行el表达式。我们不打payload，我们只是payload生成工具</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/fastjson/c3p0self}" method="post"
+          enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">WEBSHELL</label>
+            <div class="col-md-10">
+                <input type="file" name="files" placeholder="你要写入的webshell">
+            </div>
+        </div>
+
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${c3p0self}"
+                          th:if="${not #strings.isEmpty(c3p0self) }"></textarea>
+                <p class="help-block" style="color: red" th:text="${c3p0selftips}"
+                   th:if="${not #strings.isEmpty(c3p0selftips) }"></p>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr>
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>基于C3P0二次反序列化不出网Payload</h3>
+        <p class="help-block">利用C3P0二次反序列化结合其他反序列化链。我们不打payload，我们只是payload生成工具</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/fastjson/c3p0other}" method="post"
+          enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">序列化的payload</label>
+            <div class="col-md-10">
+                <input type="file" name="files" placeholder="你生成的序列化payload">
+            </div>
+        </div>
+
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${c3p0other}"
+                          th:if="${not #strings.isEmpty(c3p0other) }"></textarea>
+                <p class="help-block" style="color: red" th:text="${c3p0othertips}"
+                   th:if="${not #strings.isEmpty(c3p0othertips) }"></p>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

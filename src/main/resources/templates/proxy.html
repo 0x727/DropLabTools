@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/css/css.css"/>
+    <title>设置全局代理</title>
+</head>
+<body class="body">
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <script src="/static/js/head.js"></script>
+        <div>
+            <span style="color: red" th:text="${proxyset}" th:if="${not #strings.isEmpty(proxyset) }"></span>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>全局代理设置</h3>
+        <p class="help-block"></p>
+    </center>
+    <form class="form-horizontal" th:action="@{/common/proxyset}" enctype="multipart/form-data" method="post">
+        <div class="form-group">
+            <label class="col-md-2 control-label">开关</label>
+            <div class="col-md-10">
+                <label class="radio-inline">
+                    <input type="radio" value="true" checked="checked" name="flag"/>开启
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" value="false"  name="flag"/>关闭
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">类型</label>
+            <div class="col-md-10">
+                <label class="radio-inline">
+                    <input type="radio" checked="checked" value="HTTP" name="type"/>HTTP
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" value="SOCKS" name="type"/>SOCKS
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">HOST</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control"  name="host" value="127.0.0.1" placeholder="127.0.0.1" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">PORT</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="port" value="8080" placeholder="8080" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label" >USER</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="username" placeholder="admin" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">PASS</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" name="password" placeholder="password" />
+            </div>
+        </div>
+
+
+        <div class="form-group sr-only">
+            <label class="col-md-2 control-label" for="email">邮箱</label>
+            <div class="col-md-10">
+                <input type="email" class="form-control" id="email" placeholder="请输入邮箱" />
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+</div>
+
+<script src="/static/js/footer.js"></script>
+</body>
+</html>

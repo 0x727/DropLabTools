@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/css.css"/>
+    <title>万户OA</title>
+</head>
+<body class="body">
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <script src="/static/js/head.js"></script>
+        <div>
+            <span style="color: red" th:text="${proxyset}" th:if="${not #strings.isEmpty(proxyset) }"></span>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>金格office组件文件上传一</h3>
+        <p class="help-block">漏洞路径：/officeserverservlet</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/ezoffice/officeserverservlet}" method="post"
+          enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="col-md-2 control-label">上传选项</label>
+            <div class="col-md-10">
+                <select name="mOption">
+                    <option selected="selected">SAVEFILE</option>
+                    <option>SAVEPDF</option>
+                    <option>CHECKBUG</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">URL</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="url" placeholder="目标url"
+                       th:value="${officeserverservleturl}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">WEBSHELL</label>
+            <div class="col-md-10">
+                <input type="file" name="files" placeholder="你要写入的webshell">
+            </div>
+        </div>
+
+        <div class="form-group sr-only">
+            <label class="col-md-2 control-label">脏数据</label>
+            <div class="col-md-10">
+                <input type="text" class="form-control" value="50" name="count"/>
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${officeserverservlet}"
+                          th:if="${not #strings.isEmpty(officeserverservlet) }"></textarea>
+                <p class="help-block" style="color: red" th:text="${officeserverservlettips}"
+                   th:if="${not #strings.isEmpty(officeserverservlettips) }"></p>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr>
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>金格office组件文件上传二(office2015)</h3>
+        <p class="help-block">漏洞路径：/OfficeServer</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/ezoffice/OfficeServer}" method="post"
+          enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="col-md-2 control-label">上传选项</label>
+            <div class="col-md-10">
+                <select name="mOption">
+                    <option selected="selected">SAVEFILE</option>
+                    <option>SAVEPDF</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">URL</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="url" placeholder="目标url" th:value="${OfficeServerurl}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">WEBSHELL</label>
+            <div class="col-md-10">
+                <input type="file" name="files" placeholder="你要写入的webshell">
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${OfficeServer}"
+                          th:if="${not #strings.isEmpty(OfficeServer) }"></textarea>
+                <p class="help-block" style="color: red" th:text="${OfficeServertips}"
+                   th:if="${not #strings.isEmpty(OfficeServertips) }"></p>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr>
+
+<hr>
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>fileUpload文件上传</h3>
+        <p class="help-block">漏洞路径：/upload/fileUpload.controller</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/ezoffice/fileUploadController}" method="post"
+          enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="col-md-2 control-label">URL</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="url" placeholder="目标url"
+                       th:value="${fileUploadControllerurl}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">modelName</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="modelName" placeholder="可以控制上传路径" value="../public/edit/">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">WEBSHELL</label>
+            <div class="col-md-10">
+                <input type="file" name="files" placeholder="你要写入的webshell">
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${fileUploadController}"
+                          th:if="${not #strings.isEmpty(fileUploadController) }"></textarea>
+                <p class="help-block" style="color: red" th:text="${fileUploadControllertips}"
+                   th:if="${not #strings.isEmpty(fileUploadControllertips) }"></p>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<hr>
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>金格组件payload计算(不适用2015)</h3>
+        <p class="help-block">用于计算金格组件的自定义payload</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/ezoffice/KingGEPayloadCalc}" method="post"
+          enctype="application/x-www-form-urlencoded">
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">body数据</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" name="body" placeholder="body内容"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">file数据</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" name="file" placeholder="file部分内容"></textarea>
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${KingGEPayloadCalc}"
+                          th:if="${not #strings.isEmpty(KingGEPayloadCalc) }"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

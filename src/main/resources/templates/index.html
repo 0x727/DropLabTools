@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+    <title>垃圾利用工具</title>
+</head>
+<body class="body">
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <script src="/static/js/head.js"></script>
+        <div>
+            <span style="color: red" th:text="${proxyset}" th:if="${not #strings.isEmpty(proxyset) }"></span>
+        </div>
+    </div>
+</nav>
+
+<img src="/static/image/index.png" class="img-responsive center-block">
+<div style="height: auto;width: 532px;font-family: Arial,'Microsoft Yahei','微软雅黑';" class="text-info center-block">
+    <p style="line-height: 25px">水滴实验室简介:</p>
+    <p style="line-height: 25px">红队渗透技术研究团队，主要方向以研究攻防红队技术为主，百场以上国家级，省级攻防对抗优秀攻击队称号，以红队视角评估客户安全防护体系薄弱点，为高端客户提供专业的红队评估服务。实验室成员均为从业多年攻防实战的红队选手，拥有非常完善的攻防经验，为客户的安全防御能力检测提供了强有力的保障。</p>
+</div>
+<script src="/static/js/footer.js"></script>
+</body>
+</html>

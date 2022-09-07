@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/css/css.css"/>
+    <title>蓝凌OA</title>
+</head>
+<body class="body">
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <script src="/static/js/head.js"></script>
+        <div>
+            <span style="color: red" th:text="${proxyset}" th:if="${not #strings.isEmpty(proxyset) }"></span>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>SSRF漏洞</h3>
+        <p class="help-block">SSRF漏洞可以读取文件，可以绕过权限校验进行漏洞利用</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/blueekp/SSRFFileRead}" method="post"
+          enctype="application/x-www-form-urlencoded">
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">URL</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="url" placeholder="目标url" th:value="${SSRFFileReadurl}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">文件路径</label>
+            <div class="col-md-10">
+                <input class="form-control" input type="text" name="filepath" placeholder="要读取的文件路径"
+                       value="/WEB-INF/KmssConfig/admin.properties">
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${SSRFFileRead}"
+                          th:if="${not #strings.isEmpty(SSRFFileRead) }"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr>
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>SSRF+XMLDecode GetShell</h3>
+        <p class="help-block">通过SSRF漏洞结合XMLDecode反序列化可以实现前台getshell，也可以尝试传递cookie，后台利用</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/blueekp/SSRFXMLDecodeRCE}" method="post"
+          enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">URL</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="url" placeholder="目标url: http://127.0.0.1/ekp" th:value="${SSRFXMLDecodeRCEurl}">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">类型</label>
+            <div class="col-md-10">
+                <label class="radio-inline">
+                    <input type="radio" value="file" name="type"/>落地webshell
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" value="memory" checked="checked" name="type"/>valve内存马
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">WEBSHELL</label>
+            <div class="col-md-10">
+                <input type="file" name="files" placeholder="根据攻击类型选择是否上传你要写入的webshell">
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${SSRFXMLDecodeRCE}"
+                          th:if="${not #strings.isEmpty(SSRFXMLDecodeRCE) }"></textarea>
+                <p class="help-block" style="color: red" th:text="${SSRFXMLDecodeRCEtips}"
+                   th:if="${not #strings.isEmpty(SSRFXMLDecodeRCEtips) }"></p>
+            </div>
+        </div>
+    </form>
+</div>
+<hr>
+<!--BlueEkpDataSysCommonTreexml-->
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>蓝凌OA-V15V16-权限绕过代码执行</h3>
+        <p class="help-block">/data/sys-common/treexml.png</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/blueekp/BlueEkpDataSysCommonTreexml}" method="post"
+          enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">URL</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="url" placeholder="目标url: http://127.0.0.1/ekp" th:value="${BlueEkpDataSysCommonTreexmlurl}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">WEBSHELL</label>
+            <div class="col-md-10">
+                <input type="file" name="files" placeholder="根据攻击类型选择是否上传你要写入的webshell">
+            </div>
+        </div>
+
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${BlueEkpDataSysCommonTreexml}"
+                          th:if="${not #strings.isEmpty(BlueEkpDataSysCommonTreexml) }"></textarea>
+                <p class="help-block" style="color: red" th:text="${BlueEkpDataSysCommonTreexmltips}"
+                   th:if="${not #strings.isEmpty(BlueEkpDataSysCommonTreexmltips) }"></p>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr>
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>管理员密码解密</h3>
+        <p class="help-block">通过SSRF漏洞读取配置文件后可用于解密管理员密码</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/blueekp/decodePassword}" method="post"
+          enctype="application/x-www-form-urlencoded">
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">URL</label>
+            <div class="col-md-10">
+                <input class="form-control" type="text" name="password" placeholder="通过SSRF读取的admin.properties">
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${decodePassword}"
+                          th:if="${not #strings.isEmpty(decodePassword) }"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr>
+
+
+<div class="container" style="background-color: #FFFFFF;">
+    <center>
+        <h3>配置文件加解密</h3>
+        <p class="help-block">蓝凌OA配置文件非明文，需要解密</p>
+    </center>
+    <form class="form-horizontal" th:action="@{/blueekp/decodeFile}" method="post"
+          enctype="multipart/form-data">
+        <div class="form-group">
+            <label class="col-md-2 control-label">配置文件</label>
+            <div class="col-md-10">
+                <input type="file" name="files" placeholder="需要解密的文件">
+            </div>
+        </div>
+
+        <div class="col-md-10 col-md-offset-2" style="padding-bottom: 20px;">
+            <input type="submit" class="btn btn-default btn-lg" name="submit" value="提交">
+        </div>
+    </form>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-2 control-label">响应结果</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="5" th:text="${decodeFile}"
+                          th:if="${not #strings.isEmpty(decodeFile) }"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+</body>
+</html>
