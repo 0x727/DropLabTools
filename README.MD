@@ -38,11 +38,11 @@
 
 ![image-20220907133815125](vx_images/image-20220907133815125.png)
 
->`Memoryshell`类型：是注入内存马，一般默认都是注入一个 `Valve-Godzilla`类型的内存马。连接密码和`key`都是`qax36oNb`。注入的 `valve`内存马是两用内存马，可以单独执行系统命令。
+>`Memoryshell`类型：是注入内存马，一般默认都是注入一个 `Valve-Godzilla`类型的内存马。连接密码和`key`都是`passw0rd1024`。注入的 `valve`内存马是两用内存马，可以单独执行系统命令。
 
 ![image-20220907134103843](vx_images/image-20220907134103843.png)
 
-![image-20220907134128394](vx_images/image-20220907134128394.png)
+![image-20220907150505057](vx_images/image-20220907150505057.png)
 
 ### 首页
 
