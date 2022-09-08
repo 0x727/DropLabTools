@@ -83,4 +83,8 @@ public class TomcatEcho {
         }
         return null;
     }
+
+    public static void main(String[] args) {
+
+    }
 }
